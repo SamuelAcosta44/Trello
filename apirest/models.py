@@ -7,7 +7,7 @@ class Priority(models.Model):
         ('MEDIUM', 'Medium'),
         ('LOW', 'Low')
     ]
-    name = models.CharField(max_length=40, choices=PRIORITY_NAME)
+    name = models.CharField(max_length=40, choices=PRIORITY_NAME, default='High')
 
     def __str__(self):
         return self.name
