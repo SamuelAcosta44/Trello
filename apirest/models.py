@@ -14,7 +14,7 @@ class Task(models.Model):
     description = models.TextField()
     deadline = models.DateField()
     comment = models.TextField()
-    status = models.CharField(max_length = 10, choices = STATUS_NAME)
+    status = models.CharField(max_length = 10, choices = STATUS_NAME, default = 'Backlog')
 
     def __str__(self):
         return self.name
