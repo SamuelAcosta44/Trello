@@ -2,12 +2,7 @@ from django.db import models
 
 # Create your models here.
 class Priority(models.Model):
-    PRIORITY_NAME = [
-        ('HIGH', 'High'),
-        ('MEDIUM', 'Medium'),
-        ('LOW', 'Low')
-    ]
-    name = models.CharField(max_length=40, choices=PRIORITY_NAME, default='High')
+    name = models.CharField(max_length=40, default='High')
 
     def __str__(self):
         return self.name
