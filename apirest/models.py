@@ -20,7 +20,7 @@ class Task(models.Model):
     name = models.CharField(max_length=40)
     description = models.TextField()
     deadline = models.DateField()
-    comment = models.TextField()
+    comment = models.TextField(blank=True, null=True)
     status = models.CharField(max_length = 10, choices = STATUS_NAME, default = 'Backlog')
     priority = models.ForeignKey(Priority, on_delete=models.CASCADE, default = 1)
 
