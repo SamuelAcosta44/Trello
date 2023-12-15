@@ -9,7 +9,6 @@ from .serializers import TaskSerializer
 @api_view(['GET', 'POST', 'PUT', 'PATCH'])
 def task_api_view(request, pk=None):
     if request.method == 'GET':
-        # Operación GET: Obtener lista de tareas o detalles de una tarea específica
         if pk is None:
             tasks = Task.objects.all()
             serializer = TaskSerializer(tasks, many=True)
@@ -20,7 +19,6 @@ def task_api_view(request, pk=None):
             return Response(serializer.data)
 
     elif request.method == 'POST':
-        # Operación POST: Agregar una nueva tarea
         serializer = TaskSerializer(data=request.data)
         try:
             if serializer.is_valid():
@@ -32,7 +30,6 @@ def task_api_view(request, pk=None):
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     elif request.method in ['PUT', 'PATCH']:
-        # Operación PUT o PATCH: Actualizar una tarea existente
         task = get_object_or_404(Task, id=pk)
         original_data = TaskSerializer(task).data
 
