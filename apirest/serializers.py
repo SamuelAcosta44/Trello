@@ -1,7 +1,10 @@
 from rest_framework import serializers
-from .models import Task
+from .models import Task, Priority
 
 class TaskSerializer(serializers.ModelSerializer):
+    priority = serializers.PrimaryKeyRelatedField(queryset=Priority.objects.all())
+
     class Meta:
         model = Task
-        fields = ('__all__')
+        fields = ['id', 'name', 'description', 'deadline', 'comment', 'status', 'priority']
+    
