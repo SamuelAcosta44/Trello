@@ -41,3 +41,21 @@ def updateTask(request, pk):
             return Response(response_data)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'PATCH'])
+def patchTask(request, pk):
+    task = get_object_or_404(Task, id=pk)
+
+    if request.method == 'GET':
+            serializer = TaskSerializer(task)
+            return Response(serializer.data)
+    elif request.method == 'PATCH':
+        original_data = TaskSerializer(task).data
+        serializer = TaskSerializer(instance=task, data=request.data, partial=True)
+        
+        if serializer.is_valid():
+            serializer.save()
+            response_data = {'updated_data': serializer.data}
+            return Response(response_data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
