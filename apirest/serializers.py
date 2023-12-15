@@ -4,6 +4,4 @@ from .models import Task
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
-        fields = ['id', 'name', 'description', 'deadline', 'comment', 'status', 'priority']
-    
-    priority = serializers.StringRelatedField()
+        fields = ('__all__')
