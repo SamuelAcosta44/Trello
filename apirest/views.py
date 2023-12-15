@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -23,16 +24,20 @@ def addTask(request):
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
-@api_view(['PUT'])
+@api_view(['GET', 'PUT'])
 def updateTask(request, pk):
-    task = Task.objects.get(id=pk)
-    serializer = TaskSerializer(instance=task, date=request.data)
+    task = get_object_or_404(Task, id=pk)
 
-    try:
+    if request.method == 'GET':
+            serializer = TaskSerializer(task)
+            return Response(serializer.data)
+    elif request.method == 'PUT':
+        original_data = TaskSerializer(task).data
+        serializer = TaskSerializer(instance=task, data=request.data)
+        
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+            response_data = {'updated_data': serializer.data}
+            return Response(response_data)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    except Exception as e:
-        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
