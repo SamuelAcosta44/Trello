@@ -6,7 +6,7 @@ from .models import Task
 from .serializers import TaskSerializer
 
 # Create your views here.
-@api_view(['GET', 'POST', 'PUT', 'PATCH'])
+@api_view(['GET', 'POST', 'PUT', 'PATCH', 'DELETE'])
 def task_api_view(request, pk=None):
     if request.method == 'GET':
         if pk is None:
