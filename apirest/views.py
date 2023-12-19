@@ -1,3 +1,6 @@
+from django.contrib.auth import authenticate, login
+from django.shortcuts import render, redirect
+from .forms import SimpleAuthenticationForm
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -5,7 +8,43 @@ from rest_framework.response import Response
 from .models import Task
 from .serializers import TaskSerializer
 
+
 # Create your views here.
+def login_view(request):
+    if request.method == 'POST':
+        form = SimpleAuthenticationForm(request, request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(request, username=username, password=password)
+
+            if user is not None:
+                login(request, user)
+                return redirect(task_api_view)
+    else:
+        form = SimpleAuthenticationForm()
+
+    return render(request, 'login.html', {'form': form})
+
+@api_view(['GET'])
+def filter_by_status(request, status):
+    queryset = Task.objects.filter(status=status) if status else Task.objects.all()
+    serializer = TaskSerializer(queryset, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def filter_by_deadline(request, deadline):
+    queryset = Task.objects.filter(deadline=deadline) if deadline else Task.objects.all()
+    serializer = TaskSerializer(queryset, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def filter_by_name(request, name):
+    queryset = Task.objects.filter(name__icontains=name) if name else Task.objects.all()
+    serializer = TaskSerializer(queryset, many=True)
+    return Response(serializer.data)
+
+
 @api_view(['GET', 'POST', 'PUT', 'PATCH', 'DELETE'])
 def task_api_view(request, pk=None):
     if request.method == 'GET':

@@ -81,7 +81,7 @@ DATABASES = {
         'NAME': 'tasksdb',
         'USER': 'postgres',
         'PASSWORD': 'Ticsocial2003123*',
-        'HOST': 'localhost',
+        'HOST': 'trello-postgres-1',
         'PORT': '5432'
     }
 }
